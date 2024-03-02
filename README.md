@@ -1,2 +1,2 @@
-# terraform-aws
-Terraform modules built for the AWS cloud provider
+# Terraform
+Re-usable modules to build out AWS & Azure resources.
