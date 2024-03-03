@@ -7,10 +7,16 @@ terraform {
     }
 }
 
+
+provider "azurerm" {
+    features {}
+}
+
+
 module "resource_group" {
     source = "github.com/chrisgt21/terraform/modules/azure/account_management/resource_group"
     name = var.resource_group_name
-    
+
     
 }
 
