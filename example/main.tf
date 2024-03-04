@@ -40,5 +40,8 @@ module "subnet" {
 }
 
 module "route_table" {
-    
+    source = "github.com/chrisgt21/terraform/modules/azure/network/route_table"
+
+    name = "main_route_table"
+    resource_group_name = var.resource_group_name
 }
