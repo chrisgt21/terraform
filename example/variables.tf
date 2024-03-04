@@ -12,5 +12,5 @@ variable "vnet_address_space" {
 
 variable "vnet_dns_servers" {
     type = list(string)
-    default = [""]
+    default = []
 }
