@@ -54,7 +54,7 @@ module "main_route_table" {
     #source = "github.com/chrisgt21/terraform/modules/azure/network/route_table"
     source = "../modules/azure/network/route_table"
 
-    name = "main"
+    name = var.main_rt_name
     resource_group_name = var.resource_group_name
     depends_on = [module.subnet]
 }
@@ -63,7 +63,7 @@ module "database_route_table" {
     #source = "github.com/chrisgt21/terraform/modules/azure/network/route_table"
     source = "../modules/azure/network/route_table"
 
-    name = "database"
+    name = var.database_rt_name
     resource_group_name = var.resource_group_name
     depends_on = [module.subnet]
 }
@@ -76,4 +76,16 @@ module "route_table_association" {
     #route_table_id = lookup(var.subnet_route_table_map, each.key, module.main_route_table.id)
     route_table_id = lookup(local.route_table_ids, lookup(var.subnet_route_table_map, each.key, "main"), "")
     depends_on = [module.main_route_table, module.database_route_table]
+}
+
+
+module "main_rt_routes" {
+    source = "../modules/azure/network/route"
+    for_each = var.routes
+
+    name = each.key
+    resource_group_name = var.resource_group_name
+    route_table_name = var.main_rt_name
+    address_prefix = each.value.address_prefix
+    next_hop_type = each.value.next_hop_type
 }

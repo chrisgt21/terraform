@@ -11,7 +11,7 @@ variable "route_table_name" {
 }
 
 variable "address_prefix" {
-    type = list(string)
+    type = string
 }
 
 variable "next_hop_type" {

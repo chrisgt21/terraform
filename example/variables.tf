@@ -27,3 +27,19 @@ variable "subnet_route_table_map" {
     description = "A map of subnets to route tables"
     type = map(string)
 }
+
+variable "database_rt_name" {
+    type = string
+}
+
+variable "main_rt_name" {
+    type = string
+}
+
+variable "routes" {
+    description = "A map of the CIDR ranges and their associated routes."
+    type = map(object({
+        address_prefix = string
+        next_hop_type  = string
+    }))
+}
