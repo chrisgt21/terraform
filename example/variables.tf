@@ -14,3 +14,7 @@ variable "vnet_dns_servers" {
     type = list(string)
     default = []
 }
+
+variable "database_server_subnet_prefix" {
+    type = list(string)
+}

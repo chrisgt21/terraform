@@ -35,5 +35,10 @@ module "subnet" {
     name = "database-servers"
     virtual_network_name = var.vnet_name
     address_prefixes = var.database_server_subnet_prefix
+    depends_on = [module.vnet]
 
+}
+
+module "route_table" {
+    
 }
