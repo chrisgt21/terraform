@@ -19,9 +19,17 @@ variable "vnet_dns_servers" {
 #     type = list(string)
 # }
 
+# variable "subnets" {
+#     type = map(list(string))
+# }
+
 variable "subnets" {
-    type = map(list(string))
+  type = map(object({
+    cidr     = list(string)
+    isPublic = bool
+  }))
 }
+
 
 variable "subnet_route_table_map" {
     description = "A map of subnets to route tables"
