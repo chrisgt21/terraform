@@ -103,11 +103,11 @@ module "ngw_public_ip_1" {
     sku = "Standard"
 } 
 
-module "ngw" {
+module "ngw_1" {
     #source = "github.com/chrisgt21/terraform/modules/azure/network/nat_gateway"
     source = "../modules/azure/network/nat_gateway"
 
-    name = "main_ngw"
+    name = "main_ngw_1"
     resource_group_name = var.resource_group_name
     idle_timeout_in_minutes = 5
     sku_name = "Standard"
@@ -115,12 +115,46 @@ module "ngw" {
 
 }
 
+module "ngw_public_ip_2" {
+    #source = "github.com/chrisgt21/terraform/modules/azure/network/public_ip"
+    source = "../modules/azure/network/public_ip"
+
+    name = "ngw_ip_2"
+    resource_group_name = var.resource_group_name
+    allocation_method = "Static"
+    sku = "Standard"
+} 
+
+module "ngw_2" {
+    #source = "github.com/chrisgt21/terraform/modules/azure/network/nat_gateway"
+    source = "../modules/azure/network/nat_gateway"
+
+    name = "main_ngw_2"
+    resource_group_name = var.resource_group_name
+    idle_timeout_in_minutes = 5
+    sku_name = "Standard"
+    zones = ["2"]
+
+}
+
+# module "ngw_association" {
+#     #source = "github.com/chrisgt21/terraform/modules/azure/network/nat_gateway_subnet_association"
+#     source = "../modules/azure/network/nat_gateway_subnet_association"
+
+#     for_each = { for k, v in var.subnets : k => v if !v.isPublic }
+
+#     subnet_id      = module.subnet[each.key].id
+#     nat_gateway_id = each.value.zone == 1 ? module.ngw_1.id : module.ngw_2.id
+# }
+
 module "ngw_association" {
     #source = "github.com/chrisgt21/terraform/modules/azure/network/nat_gateway_subnet_association"
     source = "../modules/azure/network/nat_gateway_subnet_association"
 
-    for_each = { for k, v in var.subnets : k => v if !v.isPublic }
+    #for_each = { for k, v in var.subnets : k => v if !v.isPublic }
+    for_each = var.subnets
 
     subnet_id      = module.subnet[each.key].id
-    nat_gateway_id = module.ngw.id
+    #nat_gateway_id = each.value.zone == 1 ? module.ngw_1.id : module.ngw_2.id
+    nat_gateway_id = each.value.isPublic ? null : (each.value.zone == 1 ? module.ngw_1.id : module.ngw_2.id)
 }
